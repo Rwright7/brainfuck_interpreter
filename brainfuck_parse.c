@@ -3,14 +3,8 @@
 #include "brainfuck_parse.h"
 #include "brainfuck_lexer.h"
 
-void parseBrainfuck(const char* code)
+void parseBrainfuck(const char* code, BrainfuckComm tokens[], int numTokens)
 {
-	BrainfuckComm tokens[MAX_CODE_LENGTH];
-	int numTokens = 0;
-
-	// Tokenize the Brainfuck code
-	tokenizeBrainfuck(code, tokens, &numTokens);
-
 	 for (int i = 0; i < numTokens; ++i) {
 		switch (tokens[i]) {
 			case INC_PTR:
