@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "brainfuck_parse.h"
 #include "brainfuck_lexer.h"
 
