@@ -10,13 +10,8 @@ int main(void)
 	int numTokens = 0;
 
 	tokenizeBrainfuck(brainfuckCode, tokens, &numTokens);
-
-	printf("Tokens:\n");
-	for(int i = 0; i < numTokens; i++)
-	{
-		printf("%d  ", tokens[i]);
-		
-	}
+	parseBrainfuck(tokens, numTokens);
+	printf("\n");
 
 	return 0;
 }

@@ -3,6 +3,6 @@
 
 #include "brainfuck_lexer.h"
 
-void parseBrainfuck(const char* code);
+void parseBrainfuck(const BrainfuckComm tokens[], int numTokens);
 
 #endif

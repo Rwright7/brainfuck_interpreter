@@ -36,9 +36,8 @@ void tokenizeBrainfuck(const char* code, BrainfuckComm tokens[], int* numTokens)
 			default:
 				tokens[*numTokens] = INVALID_COMMAND;
 				break;
-
-			(*numTokens)++;
-			code++;
 		}
+		(*numTokens)++;
+			code++;
 	}
 }
