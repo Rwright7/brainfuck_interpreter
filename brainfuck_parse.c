@@ -3,20 +3,45 @@
 #include "brainfuck_parse.h"
 #include "brainfuck_lexer.h"
 
+
+void precomputeBrackets(const BrainfuckComm tokens[], int numTokens, int bracketMap[]){
+	int stack[MAX_CODE_LENGTH];
+	int stackPointer = -1;
+
+	for (int i = 0; i < numTokens; i++){
+		if (tokens[i] == LOOP_START){
+			stack[++stackPointer]= i;
+		}else if (tokens[i] == LOOP_END){
+			if (stackPointer < 0){
+				fprintf(stderr, "Error: Unmatched closing bracket.\n");
+				exit(EXIT_FAILURE);
+			}
+			int startIndex = stack[stackPointer];
+			bracketMap[startIndex] = i;
+			bracketMap[i] = startIndex;
+		}
+	}
+	if (stackPointer >= 0){
+		fprintf(stderr,"Error: Unmatched opening bracket.\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
+
 void parseBrainfuck(const BrainfuckComm tokens[], int numTokens)
 {
-
 	unsigned char memory[MAX_CODE_LENGTH] = {0};
 	unsigned char *ptr = memory;
-	int loop_stack[MAX_CODE_LENGTH] = {0};
-	int stack_pointer = -1;
+	int bracketMap[MAX_CODE_LENGTH] = {0};
+
+	precomputeBrackets(tokens, numTokens, bracketMap);
+
 
 	for (int i = 0; i < numTokens; i++) {
 		BrainfuckComm command = tokens[i];
 
 		switch (command) {
 			case INC_PTR:
-				//printf("Before INC_PTR, pointer at: %ld\n", ptr - memory);
 				if (ptr < memory + MAX_CODE_LENGTH - 1){
 					ptr++;
 				}else{
@@ -25,7 +50,6 @@ void parseBrainfuck(const BrainfuckComm tokens[], int numTokens)
 				}
 				break;
 			case DEC_PTR:
-				//printf("Before DEC_PTR, pointer at: %ld\n", ptr - memory);
 				if (ptr > memory){
 					ptr--;
 				}else{
@@ -47,27 +71,14 @@ void parseBrainfuck(const BrainfuckComm tokens[], int numTokens)
 				//*ptr = getchar();
 				break;
 			case LOOP_START:
-				 if (*ptr == 0) {
-					int depth = 1;
-					while (depth > 0) {
-						i++;
-						if (tokens[i] == LOOP_START) {
-							depth++;
-						} else if (tokens[i] == LOOP_END) {
-							depth--;
-						}
-					}
-				} else {
-					loop_stack[++stack_pointer] = i;
+				if (*ptr == 0) {
+					i = bracketMap[i];
 				}
 				break;
 			case LOOP_END:
 				if (*ptr != 0) {
-					i = loop_stack[stack_pointer--];
-				} else {
-					stack_pointer--;
+					i = bracketMap[i];
 				}
-				break;
 			default:
 				fprintf(stderr, "Error: Unknown command encountered.\n");
 				exit(EXIT_FAILURE);

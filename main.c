@@ -3,9 +3,13 @@
 #include "brainfuck_lexer.h"
 #include "brainfuck_parse.h"
 
+#define QUOTE(...) #__VA_ARGS__
+
 int main(void)
 {
-	const char* brainfuckCode = ">++++[<+>-]<[->+<]>>[.>]";
+	const char* brainfuckCode = QUOTE(
+		
+		);
 	BrainfuckComm tokens[MAX_CODE_LENGTH];
 	int numTokens = 0;
 
@@ -14,9 +18,23 @@ int main(void)
 	printf("\n");
 
 	return 0;
+
+
 }
 
+/*
 
+
+*/
+
+//++++++++[>++++++++<-]>+.>++++++[<++++++++>-]<.>++++++++++[>++++++++++[<<.>-]<<<.>>-]
+
+
+// ++++++++[>++++++++<-]>+.++++++++[>++++++++<-]>+.++++++++[>++++++++<-]>+.  -- AI?
+
+//>+[+[<]>>+<+]>>------[<....>-]     following code prints A a thousand times
+
+// ++++++++[>++++++++<-]>+. ----- A
 
 /*
 >: Move the memory pointer to the right.
